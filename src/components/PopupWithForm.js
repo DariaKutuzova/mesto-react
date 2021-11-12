@@ -7,7 +7,7 @@ function PopupWithForm(props) {
                     {props.children}
                     <button className="popup__button" type="submit">Сохранить</button>
                 </form>
-                <button className="popup__close popup__close_type_profile" type="button" aria-label="Закрыть"/>
+                <button onClick={props.onClose} className="popup__close popup__close_type_profile" type="button" aria-label="Закрыть"/>
             </div>
         </div>
     );

@@ -21,7 +21,11 @@ function App() {
         setEditAvatarPopupOpen(!isEditAvatarPopupOpen);
     }
 
-    // const className = ` ${isEditProfilePopupOpen ? '.popup_opened' : ''}`;
+    function closeAllPopups() {
+        setEditProfilePopupOpen(false);
+        setAddPlacePopupOpen(false);
+        setEditAvatarPopupOpen(false);
+    }
 
   return (
       <div className="page">
@@ -44,7 +48,9 @@ function App() {
                       <span id="job-input-error" className="popup__input-error"/>
                   </>
               }
-              isOpen={isEditProfilePopupOpen}/>
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              />
           <PopupWithForm
               name={'add-place'}
               title={'Новое место'}
@@ -59,7 +65,8 @@ function App() {
                       <span id="link-input-error" className="popup__input-error"/>
                   </>
               }
-              isOpen={isAddPlacePopupOpen}/>
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}/>
           <PopupWithForm
               name={'avatar'}
               title={'Обновить аватар'}
@@ -72,7 +79,8 @@ function App() {
                       <span id="avatar-input-error" className="popup__input-error"/>
                   </>
               }
-              isOpen={isEditAvatarPopupOpen}/>
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}/>
           {/*<PopupWithForm isOpen={isEditProfilePopupOpen}/>*/}
       </div>
 );
