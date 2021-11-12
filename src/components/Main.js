@@ -1,22 +1,33 @@
 import avatar from '../images/avatar.jpg';
 
 function Main() {
+    function handleEditAvatarClick() {
+        console.log('something')
+        document.querySelector('.popup_type_avatar').classList.add('popup_opened');
+    }
+    function handleEditProfileClick() {
+        document.querySelector('.popup_type_profile').classList.add('popup_opened');
+    }
+    function handleAddPlaceClick() {
+        document.querySelector('.popup_type_add-place').classList.add('popup_opened');
+    }
+
     return (
         <main className="content">
             <section className="profile page__item">
                 <div className="profile__avatar-container">
-                    <button className="profile__avatar-edit"/>
+                    <button onClick={handleEditAvatarClick} className="profile__avatar-edit" />
                     <img src={avatar} alt="Аватар" className="profile__avatar"/>
                 </div>
                 <div className="profile__info">
                     <div className="profile__container">
                         <h1 className="profile__name">Жак-Ив Кусто</h1>
-                        <button className="profile__edit-button" type="button" aria-label="Изменить имя">
+                        <button onClick={handleEditProfileClick} className="profile__edit-button" type="button" aria-label="Изменить имя">
                         </button>
                     </div>
                     <p className="profile__description">Исследователь океана</p>
                 </div>
-                <button className="profile__add-button" type="button" aria-label="Добавить фото"/>
+                <button onClick={handleAddPlaceClick} className="profile__add-button" type="button" aria-label="Добавить фото"/>
             </section>
 
             <section className="elements page__item" aria-label="Фотогалерея">
