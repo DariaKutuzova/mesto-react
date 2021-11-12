@@ -1,5 +1,6 @@
 import React from 'react';
 import api from '../utils/Api';
+import Card from './Card';
 
 function Main(props) {
 
@@ -14,9 +15,7 @@ function Main(props) {
                 setUserName(userData.name);
                 setUserDescription(userData.about);
                 setUserAvatar(userData.avatar)
-                // userInfo.setUserInfo(userData);
-                // ownerId = userData._id;
-                // cardList.renderItems(cards);
+
                 setCards(allCards);
 
             })
@@ -44,14 +43,10 @@ function Main(props) {
             </section>
 
             <section className="elements page__item" aria-label="Фотогалерея">
+                {cards.map(card =>
+                    <Card card={card} key={card._id} onCardClick={props.onCardClick}/>
+                )}
             </section>
-            <div className="popup popup_type_open-image">
-                <div className="popup__open-image">
-                    <img src="#" alt="#" className="popup__image"/>
-                    <p className="popup__image-title"/>
-                    <button className="popup__close popup__close_type_image" type="button" aria-label="Закрыть"/>
-                </div>
-            </div>
             <div className="popup popup_type_confirm">
                 <div className="popup__container popup__container_type_confirm">
                     <form action="#" className="popup__form popup__form_type_confirm" name="confirm-form">
@@ -61,22 +56,6 @@ function Main(props) {
                     <button className="popup__close popup__close_type_confirm" type="button" aria-label="Закрыть"/>
                 </div>
             </div>
-            <section className="elements page__item" aria-label="Фотогалерея">
-
-            {cards.map(card =>
-                <article className="element">
-                    <img src={card.link} alt={card.name} className="element__image"/>
-                        <div className="element__caption">
-                            <h2 className="element__description">{card.name}</h2>
-                            <div className="element__likes">
-                                <button className="element__like" type="button" aria-label="Нравится" />
-                                <span className="element__number-of-likes">{card.likes.length}</span>
-                            </div>
-                        </div>
-                        <button className="element__trash" type="button" aria-label="Удалить" />
-                </article>
-            )}
-            </section>
         </main>
     );
 }

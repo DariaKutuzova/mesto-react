@@ -3,11 +3,13 @@ import Header from '../components/Header';
 import Main from '../components/Main';
 import Footer from '../components/Footer';
 import PopupWithForm from './PopupWithForm';
+import ImagePopup from "./ImagePopup";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
+    const [selectedCard, setSelectedCard] = React.useState(false);
 
     function handleEditProfileClick() {
         setEditProfilePopupOpen(!isEditProfilePopupOpen);
@@ -21,10 +23,15 @@ function App() {
         setEditAvatarPopupOpen(!isEditAvatarPopupOpen);
     }
 
+    function handleCardClick(card) {
+        setSelectedCard(card)
+    }
+
     function closeAllPopups() {
         setEditProfilePopupOpen(false);
         setAddPlacePopupOpen(false);
         setEditAvatarPopupOpen(false);
+        setSelectedCard(false);
     }
 
   return (
@@ -32,7 +39,8 @@ function App() {
         <Header />
         <Main onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}/>
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}/>
           <Footer />
           <PopupWithForm
               name={'profile'}
@@ -82,6 +90,10 @@ function App() {
               isOpen={isEditAvatarPopupOpen}
               onClose={closeAllPopups}/>
           {/*<PopupWithForm isOpen={isEditProfilePopupOpen}/>*/}
+          <ImagePopup
+              card={selectedCard}
+              isOpen={selectedCard}
+              onClose={closeAllPopups}/>
       </div>
 );
 }
