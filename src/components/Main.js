@@ -1,4 +1,3 @@
-import avatar from '../images/avatar.jpg';
 import React from 'react';
 import api from '../utils/Api';
 
@@ -11,19 +10,20 @@ function Main(props) {
 
     React.useEffect(() => {
         Promise.all([api.getAllCards(), api.getApiUserInfo()])
-            .then(([cards, userData]) => {
+            .then(([allCards, userData]) => {
                 setUserName(userData.name);
                 setUserDescription(userData.about);
                 setUserAvatar(userData.avatar)
                 // userInfo.setUserInfo(userData);
                 // ownerId = userData._id;
-
                 // cardList.renderItems(cards);
+                setCards(allCards);
+
             })
             .catch((err) => {
                 console.log(`${err}`);
             });
-    }, [userName, userDescription, userAvatar]);
+    }, []);
 
     return (
         <main className="content">
@@ -61,6 +61,22 @@ function Main(props) {
                     <button className="popup__close popup__close_type_confirm" type="button" aria-label="Закрыть"/>
                 </div>
             </div>
+            <section className="elements page__item" aria-label="Фотогалерея">
+
+            {cards.map(card =>
+                <article className="element">
+                    <img src={card.link} alt={card.name} className="element__image"/>
+                        <div className="element__caption">
+                            <h2 className="element__description">{card.name}</h2>
+                            <div className="element__likes">
+                                <button className="element__like" type="button" aria-label="Нравится" />
+                                <span className="element__number-of-likes">{card.likes.length}</span>
+                            </div>
+                        </div>
+                        <button className="element__trash" type="button" aria-label="Удалить" />
+                </article>
+            )}
+            </section>
         </main>
     );
 }
