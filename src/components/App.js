@@ -1,13 +1,79 @@
+import React from "react";
 import Header from '../components/Header';
 import Main from '../components/Main';
 import Footer from '../components/Footer';
+import PopupWithForm from "./PopupWithForm";
 
 function App() {
+    const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
+    const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+    const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
+
+    function handleEditProfileClick() {
+        setEditProfilePopupOpen(!isEditProfilePopupOpen);
+    }
+
+    function handleAddPlaceClick() {
+        setAddPlacePopupOpen(!isAddPlacePopupOpen);
+    }
+
+    function handleEditAvatarClick() {
+        setEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+    }
+
+    // const className = ` ${isEditProfilePopupOpen ? '.popup_opened' : ''}`;
+
   return (
       <div className="page">
         <Header />
-        <Main />
-        <Footer />
+        <Main onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}/>
+          <Footer />
+          <PopupWithForm
+              name={'profile'}
+              title={'Редактировать профиль'}
+              children={
+                  <>
+                      <input type="text" placeholder="Имя Фамилия" className="popup__input popup__input_value_name"
+                             id="name-input" name="name" minLength="2" maxLength="40" required/>
+                      <span id="name-input-error" className="popup__input-error"/>
+                      <input type="text" placeholder="Род деятельности"
+                             className="popup__input popup__input_value_job"
+                             id="job-input" name="info" minLength="2" maxLength="200" required/>
+                      <span id="job-input-error" className="popup__input-error"/>
+                  </>
+              }
+              isOpen={isEditProfilePopupOpen}/>
+          <PopupWithForm
+              name={'add-place'}
+              title={'Новое место'}
+              children={
+                  <>
+                      <input type="text" placeholder="Название" className="popup__input popup__input_value_place"
+                             id="place-input" name="name" minLength="2" maxLength="30" required/>
+                      <span id="place-input-error" className="popup__input-error"/>
+                      <input type="url" placeholder="Ссылка на картинку"
+                             className="popup__input popup__input_value_link"
+                             id="link-input" name="link" required/>
+                      <span id="link-input-error" className="popup__input-error"/>
+                  </>
+              }
+              isOpen={isAddPlacePopupOpen}/>
+          <PopupWithForm
+              name={'avatar'}
+              title={'Обновить аватар'}
+              children={
+                  <>
+                      <input type="url" placeholder="https://somewebsite.com/someimage.jpg"
+                             className="popup__input popup__input_value_link popup__input_type_notlast"
+                             id="avatar-input"
+                             name="avatar" required/>
+                      <span id="avatar-input-error" className="popup__input-error"/>
+                  </>
+              }
+              isOpen={isEditAvatarPopupOpen}/>
+          {/*<PopupWithForm isOpen={isEditProfilePopupOpen}/>*/}
       </div>
 );
 }
