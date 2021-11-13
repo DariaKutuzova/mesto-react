@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import Footer from '../components/Footer';
@@ -6,32 +6,34 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from "./ImagePopup";
 
 function App() {
-    const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
-    const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
-    const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-    const [selectedCard, setSelectedCard] = React.useState(false);
+    const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
+    const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+    const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+    const [isImagePopupOpen, setImagePopupOpen] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(null);
 
     function handleEditProfileClick() {
-        setEditProfilePopupOpen(!isEditProfilePopupOpen);
+        setEditProfilePopupOpen(true);
     }
 
     function handleAddPlaceClick() {
-        setAddPlacePopupOpen(!isAddPlacePopupOpen);
+        setAddPlacePopupOpen(true);
     }
 
     function handleEditAvatarClick() {
-        setEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+        setEditAvatarPopupOpen(true);
     }
 
     function handleCardClick(card) {
-        setSelectedCard(card)
+        setSelectedCard(card);
+        setImagePopupOpen(true);
     }
 
     function closeAllPopups() {
         setEditProfilePopupOpen(false);
         setAddPlacePopupOpen(false);
         setEditAvatarPopupOpen(false);
-        setSelectedCard(false);
+        setImagePopupOpen(false);
     }
 
   return (
@@ -89,10 +91,9 @@ function App() {
               }
               isOpen={isEditAvatarPopupOpen}
               onClose={closeAllPopups}/>
-          {/*<PopupWithForm isOpen={isEditProfilePopupOpen}/>*/}
           <ImagePopup
+              isOpen={isImagePopupOpen}
               card={selectedCard}
-              isOpen={selectedCard}
               onClose={closeAllPopups}/>
       </div>
 );
