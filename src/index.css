@@ -46,4 +46,6 @@
 @import url(./blocks/popup/__input/_type/popup__input_type_notlast.css);
 @import url(./blocks/profile/__avatar-container/profile__avatar-container.css);
 @import url(./blocks/profile/__avatar-edit/profile__avatar-edit.css);
+@import url(blocks/element/__trash/_visible/element__trash_visible.css);
+@import url(blocks/element/__trash/_hidden/element__trash_hidden.css);
 

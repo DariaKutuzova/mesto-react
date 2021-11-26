@@ -5,9 +5,6 @@ import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
-    // const [userName, setUserName] = useState('');
-    // const [userDescription, setUserDescription] = useState('');
-    // const [userAvatar, setUserAvatar] = useState('');
     const [cards, setCards] = useState([]);
 
     //Подписываемся на контекст
@@ -16,39 +13,37 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
     useEffect(() => {
         Promise.all([api.getAllCards(), api.getApiUserInfo()])
             .then(([allCards, userData]) => {
-                // setUserName(userData.name);
-                // setUserDescription(userData.about);
-                // setUserAvatar(userData.avatar)
 
                 setCards(allCards);
-
             })
             .catch((err) => {
                 console.log(`${err}`);
             });
     }, []);
 
+    //Функция лайка карточки
     function handleCardLike(card) {
-        // Проверяем, есть ли уже лайк на этой карточке
-        const isOwn = card.likes.some(i => i._id === currentUser._id);
+        // Снова проверяем, есть ли уже лайк на этой карточке
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
 
         // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, !isOwn)
+        api.changeLikeCardStatus(card._id, isLiked)
             .then((newCard) => {
             setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
         });
     }
 
+    //Функция удаления карточки
     function handleCardDelete(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
-
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-        });
+        api.deleteCard(card._id)
+            .then(() => {
+                const newCards = cards.filter((elem) => elem !== card);
+                setCards(newCards);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
-
 
     return (
         <main className="content">
@@ -70,7 +65,8 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
             <section className="elements page__item" aria-label="Фотогалерея">
                 {cards.map(card =>
-                    <Card card={card} key={card._id} onCardClick={onCardClick}/>
+                    <Card card={card} key={card._id} onCardClick={onCardClick} onCardLike={handleCardLike}
+                          onCardDelete={handleCardDelete}/>
                 )}
             </section>
         </main>

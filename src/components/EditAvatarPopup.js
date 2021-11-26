@@ -6,7 +6,7 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
     const [avatar, setAvatar] = useState('');
 
     const avatarRef = useRef('');
-    
+
     function handleChangeAvatar(e) {
         setAvatar(e.target.value);
     }
