@@ -6,6 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from "./ImagePopup";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import api from "../utils/Api";
+import EditProfilePopup from '../components/EditProfilePopup'
 
 
 function App() {
@@ -57,6 +58,19 @@ function App() {
         setImagePopupOpen(false);
     }
 
+    function handleUpdateUser(data) {
+        api.patchUserInfo(data)
+            .then(
+                (data) => {
+                    setCurrentUser(data);
+                    closeAllPopups();
+                },
+                (err) => {
+                    console.log(err);
+                }
+            )
+    }
+
   return (
       <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -66,23 +80,7 @@ function App() {
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}/>
           <Footer />
-          <PopupWithForm
-              name={'profile'}
-              title={'Редактировать профиль'}
-              children={
-                  <>
-                      <input type="text" placeholder="Имя Фамилия" className="popup__input popup__input_value_name"
-                             id="name-input" name="name" minLength="2" maxLength="40" required/>
-                      <span id="name-input-error" className="popup__input-error"/>
-                      <input type="text" placeholder="Род деятельности"
-                             className="popup__input popup__input_value_job"
-                             id="job-input" name="info" minLength="2" maxLength="200" required/>
-                      <span id="job-input-error" className="popup__input-error"/>
-                  </>
-              }
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              />
+          <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
           <PopupWithForm
               name={'add-place'}
               title={'Новое место'}
