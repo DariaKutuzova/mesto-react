@@ -1,9 +1,12 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import Footer from '../components/Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from "./ImagePopup";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
+import api from "../utils/Api";
+
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -11,6 +14,24 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
     const [isImagePopupOpen, setImagePopupOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
+
+    const [currentUser, setCurrentUser] = useState({ name: 'Алёша' });
+
+    useEffect(() => {
+        Promise.all([api.getAllCards(), api.getApiUserInfo()])
+            .then(([allCards, userData]) => {
+                setCurrentUser(userData);
+                // setUserName(userData.name);
+                // setUserDescription(userData.about);
+                // setUserAvatar(userData.avatar)
+                //
+                // setCards(allCards);
+
+            })
+            .catch((err) => {
+                console.log(`${err}`);
+            });
+    }, []);
 
     function handleEditProfileClick() {
         setEditProfilePopupOpen(true);
@@ -37,6 +58,7 @@ function App() {
     }
 
   return (
+      <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
         <Main onEditProfile={handleEditProfileClick}
@@ -96,6 +118,7 @@ function App() {
               card={selectedCard}
               onClose={closeAllPopups}/>
       </div>
+      </CurrentUserContext.Provider>
 );
 }
 
