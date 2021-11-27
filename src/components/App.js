@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import Footer from '../components/Footer';
-import PopupWithForm from './PopupWithForm';
+// import PopupWithForm from './PopupWithForm';
 import ImagePopup from "./ImagePopup";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import api from "../utils/Api";
@@ -132,24 +132,7 @@ function App() {
               cards={cards} />
           <Footer />
           <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
-          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit}
-          />
-          <PopupWithForm
-              name={'add-place'}
-              title={'Новое место'}
-              children={
-                  <>
-                      <input type="text" placeholder="Название" className="popup__input popup__input_value_place"
-                             id="place-input" name="name" minLength="2" maxLength="30" required/>
-                      <span id="place-input-error" className="popup__input-error"/>
-                      <input type="url" placeholder="Ссылка на картинку"
-                             className="popup__input popup__input_value_link"
-                             id="link-input" name="link" required/>
-                      <span id="link-input-error" className="popup__input-error"/>
-                  </>
-              }
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}/>
+          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
           <ImagePopup
               isOpen={isImagePopupOpen}
