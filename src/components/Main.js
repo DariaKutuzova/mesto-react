@@ -1,49 +1,11 @@
-import {useState, useEffect, useContext} from 'react';
-import api from '../utils/Api';
+import {useContext} from 'react';
 import Card from './Card';
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
-
-    const [cards, setCards] = useState([]);
+function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete}) {
 
     //Подписываемся на контекст
     const currentUser = useContext(CurrentUserContext);
-
-    useEffect(() => {
-        Promise.all([api.getAllCards(), api.getApiUserInfo()])
-            .then(([allCards, userData]) => {
-
-                setCards(allCards);
-            })
-            .catch((err) => {
-                console.log(`${err}`);
-            });
-    }, []);
-
-    //Функция лайка карточки
-    function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
-
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, isLiked)
-            .then((newCard) => {
-            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-        });
-    }
-
-    //Функция удаления карточки
-    function handleCardDelete(card) {
-        api.deleteCard(card._id)
-            .then(() => {
-                const newCards = cards.filter((elem) => elem !== card);
-                setCards(newCards);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
 
     return (
         <main className="content">
@@ -65,8 +27,8 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
             <section className="elements page__item" aria-label="Фотогалерея">
                 {cards.map(card =>
-                    <Card card={card} key={card._id} onCardClick={onCardClick} onCardLike={handleCardLike}
-                          onCardDelete={handleCardDelete}/>
+                    <Card card={card} key={card._id} onCardClick={onCardClick}
+                          cards={cards} onCardLike={onCardLike} onCardDelete={onCardDelete} />
                 )}
             </section>
         </main>
