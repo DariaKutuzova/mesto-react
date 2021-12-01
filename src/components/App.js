@@ -63,11 +63,10 @@ function App() {
                 (data) => {
                     setCurrentUser(data);
                     closeAllPopups();
-                },
-                (err) => {
-                    console.log(err);
-                }
-            )
+                })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     //Изменить аватар
@@ -77,11 +76,10 @@ function App() {
                 (data) => {
                     setCurrentUser(data);
                     closeAllPopups();
-                },
-                (err) => {
-                    console.log(err);
-                }
-            )
+                })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     //Функция лайка карточки
@@ -93,7 +91,10 @@ function App() {
         api.changeLikeCardStatus(card._id, isLiked)
             .then((newCard) => {
                 setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-            });
+            })
+            .catch((err) => {
+        console.log(err);
+    });
     }
 
     //Функция удаления карточки

@@ -3,8 +3,10 @@ import {useState, useContext, useEffect} from "react";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
+    const [inputValues, setInputValues] = useState({name: '', info: ''});
+    const [inputValid, setInputValid] = useState({name: false, info: false});
+    const [inputError, setInputError] = useState({name: '', info: ''});
+    const [inputDirty, setInputDirty] = useState({name: false, info: false});
 
     //Подписываемся на контекст
     const currentUser = useContext(CurrentUserContext);
@@ -12,18 +14,21 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
     // После загрузки текущего пользователя из API
     // его данные будут использованы в управляемых компонентах.
     useEffect(() => {
-        if (currentUser &&isOpen) {
-        setName(currentUser.name);
-        setDescription(currentUser.about);}
+        if (currentUser && isOpen) {
+            setInputValues({name: '', info: ''});
+            setInputValid({name: false, info: false});
+            setInputError({name: '', info: ''});
+            setInputDirty({name: false, info: false});
+        }
     }, [currentUser, isOpen]);
 
-    function handleChangeName(e) {
-        setName(e.target.value);
-    }
-
-    function handleChangeDescription(e) {
-        setDescription(e.target.value);
-    }
+    // function handleChangeName(e) {
+    //     setName(e.target.value);
+    // }
+    //
+    // function handleChangeDescription(e) {
+    //     setDescription(e.target.value);
+    // }
 
     function handleSubmit(e) {
         // Запрещаем браузеру переходить по адресу формы
@@ -31,8 +36,38 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
 
         // Передаём значения управляемых компонентов во внешний обработчик
         onUpdateUser({
-            name: name,
-            info: description
+            name: inputValues.name,
+            info: inputValues.info,
+        });
+    }
+    //Если убрал курсор из инпута
+    function blurHandler(e) {
+        switch (e.target.name) {
+            case 'name':
+                setInputDirty({name: true});
+                break;
+            case 'info':
+                setInputDirty({info: true});
+                break;
+            default:
+                setInputDirty(false);
+                break;
+        }
+    }
+
+    //Проверка на валидность
+    function checkInputValid(e) {
+        setInputValues({
+            ...inputValues,
+            [e.target.name]: e.target.value
+        });
+        setInputValid ({
+            ...inputValid,
+            [e.target.name]: e.target.validity.valid
+        });
+        setInputError({
+            ...inputError,
+            [e.target.name]: e.target.validationMessage
         });
     }
 
@@ -43,20 +78,28 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={handleSubmit}
-            children={
-                <>
-                    <input type="text" placeholder="Имя Фамилия" className="popup__input popup__input_value_name"
-                           id="name-input" name="name" minLength="2" maxLength="40" required value={name}
-                           onChange={handleChangeName}/>
-                    <span id="name-input-error" className="popup__input-error"/>
-                    <input type="text" placeholder="Род деятельности"
-                           className="popup__input popup__input_value_job"
-                           id="job-input" name="info" minLength="2" maxLength="200" required value={description}
-                           onChange={handleChangeDescription}/>
-                    <span id="job-input-error" className="popup__input-error"/>
-                </>
-            }
-        />
+            isDisabled={!inputValid.name || !inputValid.info}
+        >
+            <input type="text" placeholder="Имя Фамилия" className={`popup__input popup__input_value_name 
+            ${!inputValid.name && inputDirty.name ? 'popup__input_type_error'
+                : ''}`}
+                   id="name-input" name="name" minLength="2" maxLength="40" required value={inputValues.name}
+                   onBlur={e => blurHandler(e)}
+                   onChange={checkInputValid}/>
+            <span id="name-input-error" className="popup__input-error popup__input-error_active">
+                {inputValid.name && !inputDirty.name ? '' : inputError.name}
+            </span>
+            <input type="text" placeholder="Род деятельности"
+                   className={`popup__input popup__input_value_job 
+            ${!inputValid.info && inputDirty.info ? 'popup__input_type_error'
+                       : ''}`}
+                   id="job-input" name="info" minLength="2" maxLength="200" required value={inputValues.info}
+                   onBlur={e => blurHandler(e)}
+                   onChange={checkInputValid}/>
+            <span id="job-input-error" className="popup__input-error popup__input-error_active">
+                {inputValid.info && !inputDirty.info ? '' : inputError.info}
+            </span>
+        </PopupWithForm>
     );
 }
 
