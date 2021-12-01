@@ -73,7 +73,7 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={handleSubmit}
-            isDisabled={!inputValid.name && !inputValid.link}
+            isDisabled={!inputValid.name || !inputValid.link}
         >
             <input type="text" placeholder="Название" className={`popup__input popup__input_value_place 
             ${!inputValid.name && inputDirty.name ? 'popup__input_type_error'
