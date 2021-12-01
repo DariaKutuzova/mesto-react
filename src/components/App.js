@@ -32,6 +32,13 @@ function App() {
             .catch((err) => {
                 console.log(`${err}`);
             });
+        const close = (e) => {
+            if(e.keyCode === 27){
+                closeAllPopups();
+            }
+        }
+        document.addEventListener('keydown', close)
+        return () => document.removeEventListener('keydown', close)
     }, []);
 
     function handleEditProfileClick() {

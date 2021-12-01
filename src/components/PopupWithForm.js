@@ -1,5 +1,3 @@
-import {useEffect} from "react";
-
 function PopupWithForm({isOpen, onClose, name, title, children, onSubmit, isDisabled}) {
 
     function handlePopupClose(e) {
@@ -7,16 +5,6 @@ function PopupWithForm({isOpen, onClose, name, title, children, onSubmit, isDisa
             onClose();
         }
     }
-
-    useEffect(() => {
-        const close = (e) => {
-            if(e.keyCode === 27){
-                onClose()
-            }
-        }
-        document.addEventListener('keydown', close)
-        return () => document.removeEventListener('keydown', close)
-    },[])
 
     return (
         <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}
